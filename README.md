@@ -7,6 +7,22 @@ It is MUCH faster than grep and egrep and even fgrep for large files.
 However, it does not have the same richness of command-line
 options.
 
+Someday I'll add the "-r" option.
+
+
+## Quickstart
+
+This assumes your PATH includes ~/bin and also assumes your system has "wget".
+(For Mac users, use "brew install wget".)
+
+````
+$ wget -O ~/bin/grep.pl https://github.com/fordsfords/grep.pl/raw/master/grep.pl
+$ chmod ~/bin/grep.pl
+$ grep.pl ford ~/bin/grep.pl
+# grep.pl - faster grep. See https://github.com/fordsfords/grep.pl
+# Licensed under CC0. See https://github.com/fordsfords/pgrep/LICENSE
+````
+
 ## Usage
 
 ````
