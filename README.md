@@ -63,7 +63,7 @@ real 7m39.737s
 $ time fgrep '9999999' dbglog.txt
 real 7m11.365s
 
-$ time sed -n '/9999999/p' UMdbglog.txt 
+$ time sed -n '/9999999/p' dbglog.txt 
 real	9m56.572s
 ````
 
