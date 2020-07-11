@@ -17,7 +17,7 @@ This assumes your PATH includes ~/bin and also assumes your system has "wget".
 
 ````
 $ wget -O ~/bin/grep.pl https://github.com/fordsfords/grep.pl/raw/master/grep.pl
-$ chmod ~/bin/grep.pl
+$ chmod +x ~/bin/grep.pl
 $ grep.pl ford ~/bin/grep.pl
 # grep.pl - faster grep. See https://github.com/fordsfords/grep.pl
 # Licensed under CC0. See https://github.com/fordsfords/pgrep/LICENSE
@@ -26,12 +26,13 @@ $ grep.pl ford ~/bin/grep.pl
 ## Usage
 
 ````
-Usage: grep.pl [-h] [-i] [-n] [-o re_opts] [file ...]
+Usage: grep.pl [-h] [-i] [-n] [-o re_opts] [-v] pattern [file ...]
 Where:
     -h - help.
     -i - case insensitive search.
     -n - include line numbers.
     -o re_opts - Perl regular expression options.
+    pattern - Perl regular expression.
     file ... - zero or more input files.  If omitted, inputs from stdin.
 ````
 
@@ -42,6 +43,13 @@ over 195 million lines.
 (I omitted sys and user times.)
 
 ````
+$ time grep.pl '9999999' dbglog.txt
+real  2m8.341s
+````
+
+Let's compare that to some other commands:
+
+````
 $ time cat dbglog.txt >/dev/null
 real 0m35.423s
  
@@ -49,14 +57,14 @@ $ time wc dbglog.txt
 195177935 1177117603 28533284864 dbglog.txt
 real 1m44.560s
 
-$ time egrep '999999' dbglog.txt
+$ time egrep '9999999' dbglog.txt
 real 7m39.737s
 
-$ time fgrep '999999' dbglog.txt
+$ time fgrep '9999999' dbglog.txt
 real 7m11.365s
 
-$ time grep.pl '999999' dbglog.txt
-real  2m8.341s
+$ time sed -n '/9999999/p' UMdbglog.txt 
+real	9m56.572s
 ````
 
 ## License

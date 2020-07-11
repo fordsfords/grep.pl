@@ -10,12 +10,12 @@ use File::Basename;
 
 # globals
 my $tool = basename($0);
-my $usage_str = "$tool [-h] [-i] [-n] [-o re_opts] pattern [file ...]";
+my $usage_str = "$tool [-h] [-i] [-n] [-o re_opts] [-v] pattern [file ...]";
 
 # Process options.
 my $re_opts = "";
-use vars qw($opt_h $opt_i $opt_n $opt_o);
-getopts('hino:') || usage();
+use vars qw($opt_h $opt_i $opt_n $opt_o $opt_v);
+getopts('hino:v') || usage();
 
 if (defined($opt_h)) {
   help();
@@ -44,17 +44,36 @@ my $num_files = scalar(@ARGV);
 
 # Main loop; read each line in each file.
 my $exit = 1;
-while (<>) {
-  if (/$re_opts$pat/) {
-    my $prefix = "";
-    if ($num_files > 1) { $prefix .= "$ARGV:"; }
-    if ($opt_n) { $prefix .= "$.:"; }
-    print "$prefix$_";
 
-    $exit = 0;  # return success.
+$pat = "$re_opts$pat";
+
+if ($opt_v) {  # -v
+  while (<>) {
+    if (! /$pat/) {
+      my $prefix = "";
+      if ($num_files > 1) { $prefix .= "$ARGV:"; }
+      if ($opt_n) { $prefix .= "$.:"; }
+      print "$prefix$_";
+
+      $exit = 0;  # return success.
+    }
+  } continue {  # This continue clause makes "$." give line number within file.
+    close ARGV if eof;
   }
-} continue {  # This continue clause makes "$." give line number within file.
-  close ARGV if eof;
+}
+else {  # not -v
+  while (<>) {
+    if (/$pat/) {
+      my $prefix = "";
+      if ($num_files > 1) { $prefix .= "$ARGV:"; }
+      if ($opt_n) { $prefix .= "$.:"; }
+      print "$prefix$_";
+
+      $exit = 0;  # return success.
+    }
+  } continue {  # This continue clause makes "$." give line number within file.
+    close ARGV if eof;
+  }
 }
 
 # All done.
@@ -89,6 +108,7 @@ Where:
     -i - case insensitive search.
     -n - include line numbers.
     -o re_opts - Perl regular expression options.
+    -v - invert match (select lines *not* matching pattern).
     pattern - Perl regular expression.
     file ... - zero or more input files.  If omitted, inputs from stdin.
 
