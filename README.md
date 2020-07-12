@@ -9,6 +9,8 @@ options.
 
 Someday I'll add the "-r" option.
 
+**ATTENTION** See [Security Warning](#Security_Warning) below.
+
 
 ## Quickstart
 
@@ -22,6 +24,7 @@ $ grep.pl ford ~/bin/grep.pl
 # grep.pl - faster grep. See https://github.com/fordsfords/grep.pl
 # Licensed under CC0. See https://github.com/fordsfords/pgrep/LICENSE
 ````
+
 
 ## Usage
 
@@ -69,6 +72,21 @@ real 7m11.365s
 $ time sed -n '/9999999/p' dbglog.txt 
 real	9m56.572s
 ````
+
+## Security Warning
+
+This tool uses the Perl null angle operator "<>" (a.k.a. "diamond operator"),
+which uses the Perl 2-argument "open" API, which treats certain
+specially-named files differently than normal files. For example, it treats
+a file named "-" as reading standard input. And treats a file name that ends
+with the pipe character "|" as reading the output from a command.
+This can be a powerful tool, which is why I used it, but it can also be
+a security risk if a bad actor creates a file with a carefully-crafted name.
+
+See
+https://blog.geeky-boy.com/2020/07/perl-diamond-operator.html#Security_Warning
+for more information.
+
 
 ## License
 
