@@ -9,7 +9,7 @@ options.
 
 Someday I'll add the "-r" option.
 
-**ATTENTION** See [Security Warning](#security warning) below.
+**ATTENTION** See [Security Warning](#security-warning) below.
 
 
 ## Quickstart
