@@ -26,12 +26,15 @@ $ grep.pl ford ~/bin/grep.pl
 ## Usage
 
 ````
-Usage: grep.pl [-h] [-i] [-n] [-o re_opts] [-v] pattern [file ...]
+$ grep.pl -h
+Usage: grep.pl [-h] [-i] [-l] [-n] [-o re_opts] [-v] pattern [file ...]
 Where:
     -h - help.
     -i - case insensitive search.
+    -l - list files.
     -n - include line numbers.
     -o re_opts - Perl regular expression options.
+    -v - invert match (select lines *not* matching pattern).
     pattern - Perl regular expression.
     file ... - zero or more input files.  If omitted, inputs from stdin.
 ````

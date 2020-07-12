@@ -10,12 +10,12 @@ use File::Basename;
 
 # globals
 my $tool = basename($0);
-my $usage_str = "$tool [-h] [-i] [-n] [-o re_opts] [-v] pattern [file ...]";
+my $usage_str = "$tool [-h] [-i] [-l] [-n] [-o re_opts] [-v] pattern [file ...]";
 
 # Process options.
 my $re_opts = "";
-use vars qw($opt_h $opt_i $opt_n $opt_o $opt_v);
-getopts('hino:v') || usage();
+use vars qw($opt_h $opt_i $opt_l $opt_n $opt_o $opt_v);
+getopts('hilno:v') || usage();
 
 if (defined($opt_h)) {
   help();
@@ -48,12 +48,20 @@ my $exit = 1;
 $pat = "$re_opts$pat";
 
 if ($opt_v) {  # -v
+  # WARNING, the main loop is replicated below (else of -v).
   while (<>) {
     if (! /$pat/) {
       my $prefix = "";
       if ($num_files > 1) { $prefix .= "$ARGV:"; }
       if ($opt_n) { $prefix .= "$.:"; }
-      print "$prefix$_";
+
+      if ($opt_l) {
+        print "$ARGV\n";
+        close ARGV;
+      }
+      else {
+        print "$prefix$_";
+      }
 
       $exit = 0;  # return success.
     }
@@ -62,12 +70,20 @@ if ($opt_v) {  # -v
   }
 }
 else {  # not -v
+  # WARNING, the main loop is replicated above (if of -v).
   while (<>) {
     if (/$pat/) {
       my $prefix = "";
       if ($num_files > 1) { $prefix .= "$ARGV:"; }
       if ($opt_n) { $prefix .= "$.:"; }
-      print "$prefix$_";
+
+      if ($opt_l) {
+        print "$ARGV\n";
+        close ARGV;
+      }
+      else {
+        print "$prefix$_";
+      }
 
       $exit = 0;  # return success.
     }
@@ -91,7 +107,7 @@ sub usage {
   }
   print STDERR "Usage: $usage_str\n\n";
 
-  exit(1);
+  exit(2);  # Match what grep does.
 }  # usage
 
 
@@ -106,6 +122,7 @@ Usage: $usage_str
 Where:
     -h - help.
     -i - case insensitive search.
+    -l - list files.
     -n - include line numbers.
     -o re_opts - Perl regular expression options.
     -v - invert match (select lines *not* matching pattern).
