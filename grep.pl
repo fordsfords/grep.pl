@@ -10,16 +10,17 @@ use File::Basename;
 
 # globals
 my $tool = basename($0);
-my $usage_str = "$tool [-h] [-i] [-l] [-n] [-o re_opts] [-v] pattern [file ...]";
+my $usage_str = "$tool [-h] [-i] [-l] [-n] [-o re_opts] [-v] [-V] pattern [file ...]";
 
 # Process options.
-my $re_opts = "";
-use vars qw($opt_h $opt_i $opt_l $opt_n $opt_o $opt_v);
-getopts('hilno:v') || usage();
+use vars qw($opt_h $opt_i $opt_l $opt_n $opt_o $opt_v $opt_V);
+getopts('hilno:vV') || usage();
 
 if (defined($opt_h)) {
   help();
 }
+
+my $re_opts = "";  # Accumulate regular expression options.
 if (defined($opt_o)) {
   $re_opts .= $opt_o;
 }
@@ -47,6 +48,8 @@ my $exit = 1;
 
 $pat = "$re_opts$pat";
 
+my $cur_count = 0;  # line count within file.
+
 if ($opt_v) {  # -v
   # WARNING, the main loop is replicated below (else of -v).
   while (<>) {
@@ -56,7 +59,11 @@ if ($opt_v) {  # -v
       if ($opt_n) { $prefix .= "$.:"; }
 
       if ($opt_l) {
-        print "$ARGV\n";
+        if ($opt_V) {
+          print "$prefix$_";
+        } else {
+          print "$ARGV\n";
+        }
         close ARGV;
       }
       else {
@@ -78,7 +85,11 @@ else {  # not -v
       if ($opt_n) { $prefix .= "$.:"; }
 
       if ($opt_l) {
-        print "$ARGV\n";
+        if ($opt_V) {
+          print "$prefix$_";
+        } else {
+          print "$ARGV\n";
+        }
         close ARGV;
       }
       else {
@@ -88,7 +99,10 @@ else {  # not -v
       $exit = 0;  # return success.
     }
   } continue {  # This continue clause makes "$." give line number within file.
-    close ARGV if eof;
+    if (eof) {
+      close ARGV;
+      $cur_count = 0;
+    }
   }
 }
 
@@ -126,6 +140,7 @@ Where:
     -n - include line numbers.
     -o re_opts - Perl regular expression options.
     -v - invert match (select lines *not* matching pattern).
+    -V - verbose (e.g. print matched line with -l).
     pattern - Perl regular expression.
     file ... - zero or more input files.  If omitted, inputs from stdin.
 

@@ -30,7 +30,7 @@ $ grep.pl ford ~/bin/grep.pl
 
 ````
 $ grep.pl -h
-Usage: grep.pl [-h] [-i] [-l] [-n] [-o re_opts] [-v] pattern [file ...]
+Usage: grep.pl [-h] [-i] [-l] [-n] [-o re_opts] [-v] [-V] pattern [file ...]
 Where:
     -h - help.
     -i - case insensitive search.
@@ -38,6 +38,7 @@ Where:
     -n - include line numbers.
     -o re_opts - Perl regular expression options.
     -v - invert match (select lines *not* matching pattern).
+    -V - verbose (e.g. print matched line with -l).
     pattern - Perl regular expression.
     file ... - zero or more input files.  If omitted, inputs from stdin.
 ````
