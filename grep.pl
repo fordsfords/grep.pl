@@ -1,7 +1,14 @@
 #!/usr/bin/env perl
 # grep.pl - faster grep. See https://github.com/fordsfords/grep.pl
 #
-# Licensed under CC0. See https://github.com/fordsfords/pgrep/LICENSE
+# This code and its documentation is Copyright 2021 Steven Ford
+# and licensed "public domain" style under Creative Commons "CC0":
+#   http://creativecommons.org/publicdomain/zero/1.0/
+# To the extent possible under law, the contributors to this project have
+# waived all copyright and related or neighboring rights to this work.
+# In other words, you can use this code for any purpose without any
+# restrictions.  This work is published from: United States.  The project home
+# is https://github.com/fordsfords/grep.pl
 
 use strict;
 use warnings;
