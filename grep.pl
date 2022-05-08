@@ -55,8 +55,6 @@ my $exit = 1;
 
 $pat = "$re_opts$pat";
 
-my $cur_count = 0;  # line count within file.
-
 if ($opt_v) {  # -v
   # WARNING, the main loop is replicated below (else of -v).
   while (<>) {
@@ -71,7 +69,7 @@ if ($opt_v) {  # -v
         } else {
           print "$ARGV\n";
         }
-        close ARGV;
+        close ARGV;  # First match, skip to next file.
       }
       else {
         print "$prefix$_";
@@ -97,7 +95,7 @@ else {  # not -v
         } else {
           print "$ARGV\n";
         }
-        close ARGV;
+        close ARGV;  # First match, skip to next file.
       }
       else {
         print "$prefix$_";
@@ -106,10 +104,7 @@ else {  # not -v
       $exit = 0;  # return success.
     }
   } continue {  # This continue clause makes "$." give line number within file.
-    if (eof) {
-      close ARGV;
-      $cur_count = 0;
-    }
+    close ARGV if eof;
   }
 }
 
@@ -147,7 +142,7 @@ Where:
     -n - include line numbers.
     -o re_opts - Perl regular expression options.
     -v - invert match (select lines *not* matching pattern).
-    -V - verbose (e.g. print matched line with -l).
+    -V - verbose (i.e. print matched line with -l).
     pattern - Perl regular expression.
     file ... - zero or more input files.  If omitted, inputs from stdin.
 
